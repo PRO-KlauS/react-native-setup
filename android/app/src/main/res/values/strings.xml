@@ -1,0 +1,4 @@
+<resources>
+  <string name="app_name">React Native Setup</string>
+  <string name="default_notification_channel_id">Test_ID</string>
+</resources>
