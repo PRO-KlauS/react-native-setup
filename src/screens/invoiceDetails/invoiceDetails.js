@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { WithContainer, Loader, Button } from "../../components/index";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { Row, Col } from "native-base";
 import { useTranslation } from "react-i18next";
+import { WithContainer, Loader, Button } from "../../components/index";
 import { getInvoiceDetails } from "../../api/invoice";
 import { fonts, colors } from "../../styles/index";
 import {
@@ -20,8 +20,14 @@ const InvoiceDetails = ({ navigation, driverID, route }) => {
     isButtonLoading: false,
   });
   const { isLoading, invoiceData = {}, isButtonLoading } = state;
-  const { date, invoiceNo, chassisNo, transactionMode, amount, url } =
-    invoiceData || {};
+  const {
+    //  date,
+    invoiceNo,
+    chassisNo,
+    transactionMode,
+    amount,
+    // url
+  } = invoiceData || {};
   const { invoiceID } = route?.params || {};
   const { t } = useTranslation();
   const { icons, currencySign } = constants;
@@ -56,7 +62,7 @@ const InvoiceDetails = ({ navigation, driverID, route }) => {
     // url &&
     // setState({ ...state, isButtonLoading: true }, () => {
     downloadFileFromURL(
-      "https://file-examples-com.github.io/uploads/2017/10/file-example_PDF_1MB.pdf"
+      "https://file-examples-com.github.io/uploads/2017/10/file-example_PDF_1MB.pdf",
     );
     // "",
     //   () => {
@@ -72,17 +78,19 @@ const InvoiceDetails = ({ navigation, driverID, route }) => {
   return (
     <WithContainer
       contentStyle={styles.content}
-      isHeader={true}
+      isHeader
       title={t("invoiceDetails.headerTitle")}
       isRefreshControl={false}
       leftIcon={icons.arrowBack.name}
-      onLeftIconClick={goBack}
-    >
+      onLeftIconClick={goBack}>
       {isLoading ? (
         <Loader
-          hasLoaderText={true}
-          hasLoader={true}
-          parentStyle={{ height: Dimensions.get("window").height - 120 }}
+          hasLoaderText
+          hasLoader
+          parentStyle={{
+            height: Dimensions.get("window").height - 120,
+            backgroundColor: colors.backgroundLightGray,
+          }}
         />
       ) : (
         <>

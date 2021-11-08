@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Icon } from "native-base";
-import { Picker } from "@react-native-picker/picker";
+import { Icon, Picker } from "native-base";
+// import { Picker } from "@react-native-picker/picker";
 import { colors, spacing, fonts } from "../../styles";
 import { constants } from "../../constants";
 
@@ -29,8 +29,7 @@ const SortDropdown = ({
               showError && error ? colors.borderRed : colors.borderGray,
           },
           parentStyle,
-        ]}
-      >
+        ]}>
         <View style={styles.iconParent}>
           <Text style={styles.sortText}>Sort</Text>
           <Icon
@@ -58,13 +57,13 @@ const SortDropdown = ({
           placeholder={placeholder}
           placeholderStyle={styles.placeholder}
           selectedValue={selectedValue}
-          onValueChange={onChange}
-        >
+          onValueChange={onChange}>
           {options.map((option) => (
             <Picker.Item
               label={option.label}
               value={option.value}
               color={selectedValue === option.value && colors.textGray}
+              key={option.value}
             />
           ))}
         </Picker>

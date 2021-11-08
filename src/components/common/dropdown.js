@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Text } from "native-base";
-import { Picker } from "@react-native-picker/picker";
+import { Text, Picker } from "native-base";
+// import { Picker } from "@react-native-picker/picker";
 import { colors, spacing, fonts } from "../../styles";
 
 const Dropdown = ({
@@ -26,8 +26,7 @@ const Dropdown = ({
               showError && error ? colors.borderRed : colors.borderGray,
           },
           parentStyle,
-        ]}
-      >
+        ]}>
         <Picker
           mode="dropdown"
           enabled={!disabled}
@@ -45,13 +44,13 @@ const Dropdown = ({
           placeholder={placeholder}
           placeholderStyle={styles.placeholder}
           selectedValue={selectedValue}
-          onValueChange={onChange}
-        >
+          onValueChange={onChange}>
           {options.map((option, index) => (
             <Picker.Item
               label={option.label}
               value={option.value}
               color={index === 0 && colors.textGray}
+              key={option.value}
             />
           ))}
         </Picker>

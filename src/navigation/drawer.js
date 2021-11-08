@@ -49,7 +49,8 @@ const { icons } = constants;
 const LoginStack = () => (
   <Stack.Navigator
     initialRouteName="login"
-    screenOptions={{ headerShown: false }}>
+    screenOptions={{ headerShown: false }}
+    defaultScreenOptions={{ headerShown: false }}>
     <Stack.Screen name="login" component={Login} />
     <Stack.Screen name="otp" component={OTP} />
     <Stack.Screen name="forgotPassword" component={ForgotPassword} />
@@ -61,7 +62,8 @@ const LoginStack = () => (
 const MyProfileStack = () => (
   <Stack.Navigator
     initialRouteName="myProfile"
-    screenOptions={{ headerShown: false }}>
+    screenOptions={{ headerShown: false }}
+    defaultScreenOptions={{ headerShown: false }}>
     <Stack.Screen name="myProfile" component={MyProfile} />
   </Stack.Navigator>
 );
@@ -69,7 +71,8 @@ const MyProfileStack = () => (
 const InvoiceListingStack = () => (
   <Stack.Navigator
     initialRouteName="invoiceListing"
-    screenOptions={{ headerShown: false }}>
+    screenOptions={{ headerShown: false }}
+    defaultScreenOptions={{ headerShown: false }}>
     <Stack.Screen name="invoiceListing" component={InvoiceListing} />
     <Stack.Screen name="invoiceDetails" component={InvoiceDetails} />
   </Stack.Navigator>
@@ -227,9 +230,9 @@ const CustomDrawerContent = (props) => {
               {t("drawer.helplineNoPlaceholder")}
             </Text>
           </View>
-          {supportContacts.map(({ contactNo } = {}) => {
+          {supportContacts.map(({ contactNo } = {}, index) => {
             return contactNo ? (
-              <View style={[styles.parentView]}>
+              <View style={[styles.parentView]} key={index}>
                 <Text
                   style={[styles.supportNumber]}
                   onPress={() => dialCall(contactNo)}>
@@ -306,6 +309,7 @@ const createDrawerItem = (
             ]}
           />
         ),
+        headerShown: false,
       }}
     />
   );
@@ -360,7 +364,7 @@ const CustomDrawer = (props) => {
       )}
       initialRouteName="myProfile">
       {createDrawerItem(
-        "myProfile",
+        "myProfileStack",
         t("drawer.myProfilePlaceholder"),
         icons.profile.name,
         MyProfileStack,
@@ -369,7 +373,7 @@ const CustomDrawer = (props) => {
         { ...styles.drawerTextStyle, marginLeft: 3 },
       )}
       {createDrawerItem(
-        "invoiceListing",
+        "invoiceListingStack",
         t("drawer.invoiceHistoryPlaceholder"),
         icons.invoice.name,
         InvoiceListingStack,
@@ -387,7 +391,7 @@ const Navigator = (props) => {
     i18nInstance.changeLanguage(language || "en");
   }, []);
 
-  return token ? <CustomDrawer {...props} /> : <LoginStack {...props} />;
+  return !token ? <CustomDrawer {...props} /> : <LoginStack {...props} />;
 };
 
 const styles = StyleSheet.create({
