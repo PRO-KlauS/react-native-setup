@@ -47,7 +47,9 @@ const { icons } = constants;
 // let isIOS = Platform.OS === "ios"
 
 const LoginStack = () => (
-  <Stack.Navigator initialRouteName="login" headerMode="none">
+  <Stack.Navigator
+    initialRouteName="login"
+    screenOptions={{ headerShown: false }}>
     <Stack.Screen name="login" component={Login} />
     <Stack.Screen name="otp" component={OTP} />
     <Stack.Screen name="forgotPassword" component={ForgotPassword} />
@@ -57,13 +59,17 @@ const LoginStack = () => (
 );
 
 const MyProfileStack = () => (
-  <Stack.Navigator initialRouteName="myProfile" headerMode="none">
+  <Stack.Navigator
+    initialRouteName="myProfile"
+    screenOptions={{ headerShown: false }}>
     <Stack.Screen name="myProfile" component={MyProfile} />
   </Stack.Navigator>
 );
 
 const InvoiceListingStack = () => (
-  <Stack.Navigator initialRouteName="invoiceListing" headerMode="none">
+  <Stack.Navigator
+    initialRouteName="invoiceListing"
+    screenOptions={{ headerShown: false }}>
     <Stack.Screen name="invoiceListing" component={InvoiceListing} />
     <Stack.Screen name="invoiceDetails" component={InvoiceDetails} />
   </Stack.Navigator>
@@ -128,7 +134,7 @@ const CustomDrawerContent = (props) => {
   };
 
   const dialCall = (phoneNo) => {
-    let number = `tel:${phoneNo}`;
+    const number = `tel:${phoneNo}`;
     Linking.openURL(number);
   };
 
@@ -142,7 +148,7 @@ const CustomDrawerContent = (props) => {
             ) : firstName ? (
               <UserAvatar
                 size={120}
-                name={capitalize(firstName) + " " + capitalize(lastName)}
+                name={`${capitalize(firstName)} ${capitalize(lastName)}`}
                 bgColor={colors.backgroundLightGray}
                 textColor={colors.textSecondary}
               />
@@ -181,7 +187,7 @@ const CustomDrawerContent = (props) => {
           </View>
           <View>
             <Text style={styles.userName}>
-              {firstName ? firstName + " " + lastName : ""}
+              {firstName ? `${firstName} ${lastName}` : ""}
             </Text>
           </View>
         </View>
@@ -211,8 +217,7 @@ const CustomDrawerContent = (props) => {
                 marginTop: 5,
                 marginLeft: -1,
               },
-            ]}
-          >
+            ]}>
             <Icon
               name={icons.support.name}
               type={icons.support.type}
@@ -227,8 +232,7 @@ const CustomDrawerContent = (props) => {
               <View style={[styles.parentView]}>
                 <Text
                   style={[styles.supportNumber]}
-                  onPress={() => dialCall(contactNo)}
-                >
+                  onPress={() => dialCall(contactNo)}>
                   {contactNo}
                 </Text>
               </View>
@@ -249,7 +253,7 @@ const createDrawerItem = (
   iconStyle,
   textStyle,
   badgeCount,
-  hasBellIcon
+  hasBellIcon,
 ) => {
   return (
     <Drawer.Screen
@@ -264,8 +268,7 @@ const createDrawerItem = (
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-            }}
-          >
+            }}>
             <Text
               style={[
                 {
@@ -273,8 +276,7 @@ const createDrawerItem = (
                   width: "100%",
                 },
                 textStyle,
-              ]}
-            >
+              ]}>
               {title}
             </Text>
             {name === "notificationListing" && badgeCount > 0 ? (
@@ -356,8 +358,7 @@ const CustomDrawer = (props) => {
           supportContacts={supportContacts}
         />
       )}
-      initialRouteName="myProfile"
-    >
+      initialRouteName="myProfile">
       {createDrawerItem(
         "myProfile",
         t("drawer.myProfilePlaceholder"),
@@ -365,7 +366,7 @@ const CustomDrawer = (props) => {
         MyProfileStack,
         icons.profile.type,
         styles.drawerIconStyle,
-        { ...styles.drawerTextStyle, marginLeft: 3 }
+        { ...styles.drawerTextStyle, marginLeft: 3 },
       )}
       {createDrawerItem(
         "invoiceListing",
@@ -374,7 +375,7 @@ const CustomDrawer = (props) => {
         InvoiceListingStack,
         icons.invoice.type,
         { ...styles.drawerIconStyle, fontSize: 16, marginLeft: 5 },
-        { ...styles.drawerTextStyle, marginLeft: 2 }
+        { ...styles.drawerTextStyle, marginLeft: 2 },
       )}
     </Drawer.Navigator>
   );

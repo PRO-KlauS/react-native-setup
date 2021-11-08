@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input, Item, Icon, View, Text, Label } from "native-base";
-import { colors, fonts } from "../../styles";
 import { StyleSheet } from "react-native";
+import { colors, fonts } from "../../styles";
 import { constants } from "../../constants";
 
 const CommonTextInput = ({
@@ -50,16 +50,15 @@ const CommonTextInput = ({
   const getColor = () => {
     if (showError) {
       return colors.textRed;
-    } else {
-      if (isFocused) {
-        return colors.textPrimary;
-      }
-      return colors.textGray;
     }
+    if (isFocused) {
+      return colors.textPrimary;
+    }
+    return colors.textGray;
   };
 
   const displayIcon = () => {
-    let color = isFocused ? colors.iconPrimary : colors.iconGray;
+    const color = isFocused ? colors.iconPrimary : colors.iconGray;
     if (isPassword) {
       if (hidePassword) {
         return (
@@ -69,7 +68,7 @@ const CommonTextInput = ({
             onPress={managePasswordVisibility}
             style={[
               {
-                color: color,
+                color,
                 // marginTop: -5,
                 position: "absolute",
                 right: 10,
@@ -95,7 +94,7 @@ const CommonTextInput = ({
           onPress={managePasswordVisibility}
           style={[
             {
-              color: color,
+              color,
               // marginTop: -5,
               position: "absolute",
               right: 10,
@@ -158,7 +157,7 @@ const CommonTextInput = ({
         </>
       ) : (
         <Item
-          floatingLabel={placeholder}
+          floatingLabel={!!placeholder}
           style={[
             styles.item,
             itemStyle,
@@ -167,8 +166,7 @@ const CommonTextInput = ({
               marginBottom: showError ? 10 : 20,
               paddingBottom: value ? 0 : 4,
             },
-          ]}
-        >
+          ]}>
           {placeholder && !inputPlaceholder && (
             <Label style={([styles.label], { color: getColor() })}>
               {placeholder}

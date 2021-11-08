@@ -23,16 +23,16 @@ const showToast = (
   type,
   textStyle,
   buttonTextStyle,
-  buttonStyle
+  buttonStyle,
 ) => {
   text &&
     Toast.show({
-      text: text,
-      buttonText: buttonText,
-      type: type,
-      textStyle: textStyle,
-      buttonTextStyle: buttonTextStyle,
-      buttonStyle: buttonStyle,
+      text,
+      buttonText,
+      type,
+      textStyle,
+      buttonTextStyle,
+      buttonStyle,
       position: "bottom",
       duration: duration || 3000,
       style: [
@@ -62,13 +62,13 @@ const fromNow = (date) => moment(date).fromNow();
 const timeTo = (date) => {
   let returnValue = "-";
   if (date) {
-    let today = moment();
-    let checkingDate = moment(date);
-    let diff = moment.duration(checkingDate.diff(today));
+    const today = moment();
+    const checkingDate = moment(date);
+    const diff = moment.duration(checkingDate.diff(today));
 
-    let hoursDiff = parseInt(diff.asHours());
+    const hoursDiff = parseInt(diff.asHours(), 10);
 
-    let minutesDiff = parseInt(diff.asMinutes()) % 60;
+    const minutesDiff = parseInt(diff.asMinutes(), 10) % 60;
 
     if (hoursDiff > 24) {
       returnValue = capitalize(moment(date).toNow(true));
@@ -93,7 +93,7 @@ const titleCase = (s) => {
 };
 
 const getFileNameFromURL = (url) => {
-  let tempName =
+  const tempName =
     (url && url.split("/").pop().split("#")[0].split("?")[0]) || "";
   return tempName.replace(/%20/g, " ");
 };
@@ -120,8 +120,8 @@ const getStringWithHours = (s) => {
 
 const getFileExtensionFromName = (name) => {
   if (name) {
-    let nameArray = name.split(".") || [];
-    let extensionArray =
+    const nameArray = name.split(".") || [];
+    const extensionArray =
       (nameArray[nameArray.length - 1] &&
         nameArray[nameArray.length - 1].split("?")) ||
       [];
@@ -130,14 +130,14 @@ const getFileExtensionFromName = (name) => {
 };
 
 const getFileTypeFromName = (name) => {
-  let extension = getFileExtensionFromName(name) || "";
+  const extension = getFileExtensionFromName(name) || "";
   if (imageTypes.includes(extension.toLowerCase())) {
     return "image";
-  } else if (videoTypes.includes(extension.toLowerCase())) {
-    return "video";
-  } else {
-    return "audio";
   }
+  if (videoTypes.includes(extension.toLowerCase())) {
+    return "video";
+  }
+  return "audio";
 };
 
 const removeAllSpacesFromString = (s) => s && s.replace(/ /g, "");
@@ -172,7 +172,7 @@ const removeToken = async () => {
 
 const selectFile = async (acceptedFileTypes) => {
   try {
-    const file = await DocumentPicker.pick({
+    const file = await DocumentPicker.pickSingle({
       type: acceptedFileTypes,
     });
     return file;
@@ -437,7 +437,7 @@ const enableFontPatch = () => {
       }
     }
 
-    let newStyle = Array.isArray(origin.props.style)
+    const newStyle = Array.isArray(origin.props.style)
       ? [...origin.props.style]
       : [origin.props.style];
     if (!hasFontType) newStyle.push(settings[useIndex]);
@@ -509,7 +509,7 @@ const enableFontPatch = () => {
       }
     }
 
-    let newStyle = Array.isArray(origin.props.style)
+    const newStyle = Array.isArray(origin.props.style)
       ? [...origin.props.style]
       : [origin.props.style];
     if (!hasFontType) newStyle.push(settings[useIndex]);
@@ -541,7 +541,7 @@ const useStateCallback = (initialState) => {
 
 const openVideoPicker = async (callback) => {
   try {
-    const file = await DocumentPicker.pick({
+    const file = await DocumentPicker.pickSingle({
       type: videoTypes,
     });
     if (videoValidation(file)) {
@@ -554,7 +554,7 @@ const openVideoPicker = async (callback) => {
 
 const openImagePicker = async (callback) => {
   try {
-    const file = await DocumentPicker.pick({
+    const file = await DocumentPicker.pickSingle({
       // type: imageTypes,
       type: DocumentPicker.types.images,
     });
@@ -575,7 +575,7 @@ const openImagePicker = async (callback) => {
 };
 const openDocumentPicker = async (callback) => {
   try {
-    const file = await DocumentPicker.pick({
+    const file = await DocumentPicker.pickSingle({
       type: DocumentPicker.types.pdf,
     });
     if (documentValidation(file)) {
@@ -588,11 +588,11 @@ const openDocumentPicker = async (callback) => {
 
 const openImageAndDocumentPicker = async (callback) => {
   try {
-    const file = await DocumentPicker.pick({
+    const file = await DocumentPicker.pickSingle({
       type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
     });
     let isFileValid = false;
-    let extension = getFileExtensionFromName(file?.name);
+    const extension = getFileExtensionFromName(file?.name);
     if (imageTypes.includes(extension.toLowerCase())) {
       isFileValid = imageValidation(file);
     } else if (documentTypes.includes(extension.toLowerCase())) {
@@ -622,7 +622,7 @@ const openImagePickerWithMultiple = async (callback) => {
     } else {
       let isValid = false;
       for (const file of files) {
-        let isFileValid = imageValidation(file);
+        const isFileValid = imageValidation(file);
         if (!isFileValid) {
           isValid = false;
           break;
@@ -659,7 +659,7 @@ const openMediaPickerWithMultiple = async (callback) => {
       let isValid = false;
       for (const file of files) {
         let isFileValid = false;
-        let extension = getFileExtensionFromName(file?.name);
+        const extension = getFileExtensionFromName(file?.name);
         if (imageTypes.includes(extension.toLowerCase())) {
           isFileValid = imageValidation(file);
         } else if (videoTypes.includes(extension.toLowerCase())) {
@@ -706,7 +706,7 @@ const openMediaAndDocumentPickerWithMultiple = async (callback) => {
       let isValid = false;
       for (const file of files) {
         let isFileValid = false;
-        let extension = getFileExtensionFromName(file?.name);
+        const extension = getFileExtensionFromName(file?.name);
         if (imageTypes.includes(extension.toLowerCase())) {
           isFileValid = imageValidation(file);
         } else if (videoTypes.includes(extension.toLowerCase())) {
@@ -741,7 +741,7 @@ const openMediaAndDocumentPickerWithMultiple = async (callback) => {
 
 const openAudioPicker = async (callback) => {
   try {
-    const file = await DocumentPicker.pick({
+    const file = await DocumentPicker.pickSingle({
       type: DocumentPicker.types.audio,
     });
     if (audioValidation(file)) {
@@ -769,13 +769,11 @@ const imageValidation = (res) => {
     if (bytesToMegaBytes(size) > 5) {
       showToast(i18nInstance.t("validationMessages.imageSize5MB"));
       return false;
-    } else {
-      return true;
     }
-  } else {
-    showToast(i18nInstance.t("validationMessages.imageFormatValidation"));
-    return false;
+    return true;
   }
+  showToast(i18nInstance.t("validationMessages.imageFormatValidation"));
+  return false;
 };
 
 const videoValidation = (res) => {
@@ -785,13 +783,11 @@ const videoValidation = (res) => {
     if (bytesToMegaBytes(size) > 50) {
       showToast(i18nInstance.t("validationMessages.videoSize50MB"));
       return false;
-    } else {
-      return true;
     }
-  } else {
-    showToast(i18nInstance.t("validationMessages.videoFormatValidation"));
-    return false;
+    return true;
   }
+  showToast(i18nInstance.t("validationMessages.videoFormatValidation"));
+  return false;
 };
 
 const audioValidation = (res) => {
@@ -801,13 +797,11 @@ const audioValidation = (res) => {
     if (bytesToMegaBytes(size) > 50) {
       showToast(i18nInstance.t("validationMessages.audioSize50MB"));
       return false;
-    } else {
-      return true;
     }
-  } else {
-    showToast(i18nInstance.t("validationMessages.audioFormatValidation"));
-    return false;
+    return true;
   }
+  showToast(i18nInstance.t("validationMessages.audioFormatValidation"));
+  return false;
 };
 
 const documentValidation = (res) => {
@@ -817,20 +811,18 @@ const documentValidation = (res) => {
     if (bytesToMegaBytes(size) > 5) {
       showToast(i18nInstance.t("validationMessages.documentSize50MB"));
       return false;
-    } else {
-      return true;
     }
-  } else {
-    showToast(i18nInstance.t("validationMessages.documentFormatValidation"));
-    return false;
+    return true;
   }
+  showToast(i18nInstance.t("validationMessages.documentFormatValidation"));
+  return false;
 };
 
 const downloadFileFromURL = async (
   url,
   name,
   successCallback,
-  errorCallback
+  errorCallback,
 ) => {
   try {
     const granted = isIOS
@@ -840,14 +832,14 @@ const downloadFileFromURL = async (
           {
             title: "Storage Permission",
             message: "Please give storage access to download the file",
-          }
+          },
         );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      let dirs = RNFetchBlob.fs.dirs;
-      let urlPartArray = url ? url.split("/") : [];
-      let nameWithParams = urlPartArray[urlPartArray?.length - 1];
-      let nameArray = nameWithParams ? nameWithParams.split("?") : [];
-      let nameWithExtension = nameArray[0];
+      const dirs = RNFetchBlob.fs.dirs;
+      const urlPartArray = url ? url.split("/") : [];
+      const nameWithParams = urlPartArray[urlPartArray?.length - 1];
+      const nameArray = nameWithParams ? nameWithParams.split("?") : [];
+      const nameWithExtension = nameArray[0];
 
       showToast(i18nInstance.t("messages.downloadStarted"));
 
@@ -858,7 +850,7 @@ const downloadFileFromURL = async (
           notification: true,
           description: "Downloading",
           mediaScannable: true,
-          path: dirs.DownloadDir + "/" + (name || nameWithExtension),
+          path: `${dirs.DownloadDir}/${name || nameWithExtension}`,
         },
         // title: nameWithExtension,
         // path: (isIOS ? dirs.DocumentDir : dirs.DownloadDir) + "/" + (name || nameWithExtension),
@@ -869,12 +861,12 @@ const downloadFileFromURL = async (
         .then((res) => {
           if (isIOS) {
             RNFetchBlob.fs.writeFile(
-              dirs.DocumentDir + "/" + (name || nameWithExtension),
+              `${dirs.DocumentDir}/${name || nameWithExtension}`,
               res.data,
-              "base64"
+              "base64",
             );
             RNFetchBlob.ios.previewDocument(
-              dirs.DocumentDir + "/" + (name || nameWithExtension)
+              `${dirs.DocumentDir}/${name || nameWithExtension}`,
             );
           } else {
             RNFetchBlob.fs.scanFile([{ path: res.path() }]);
@@ -897,7 +889,7 @@ const downloadFileFromURL = async (
 };
 
 const convertRegistrationDataToFormData = (obj) => {
-  let formData = new FormData();
+  const formData = new FormData();
 
   // First form data
   formData.append("FirstName", obj.firstName);
@@ -922,7 +914,7 @@ const convertRegistrationDataToFormData = (obj) => {
         ? "DrivingLicenseNo"
         : "PanNo"
     }`,
-    removeAllSpacesFromString(obj.documentNo)
+    removeAllSpacesFromString(obj.documentNo),
   );
   obj.documentObj &&
     obj.documentObj.uri &&
@@ -936,7 +928,7 @@ const convertRegistrationDataToFormData = (obj) => {
           ? "DrivingLicenseCopy"
           : "PanCopy"
       }`,
-      obj.documentObj
+      obj.documentObj,
     );
 
   formData.append("HubId", obj.hubID);
@@ -954,12 +946,12 @@ const convertRegistrationDataToFormData = (obj) => {
   obj.vehicleRegNo &&
     formData.append(
       "electricVehicle[VehicleNo]",
-      removeAllSpacesFromString(obj.vehicleRegNo)
+      removeAllSpacesFromString(obj.vehicleRegNo),
     );
   obj.insurancePolicyNo &&
     formData.append(
       "electricVehicle[InsurancePolicyNo]",
-      obj.insurancePolicyNo
+      obj.insurancePolicyNo,
     );
 
   // Fourth Form Data
@@ -973,7 +965,7 @@ const convertRegistrationDataToFormData = (obj) => {
   obj.dcMakerNumber &&
     formData.append(
       "electricVehicle[DCConvertorMakerNumber]",
-      obj.dcMakerNumber
+      obj.dcMakerNumber,
     );
   obj.driveMakerName &&
     formData.append("electricVehicle[DriveMotorMake]", obj.driveMakerName);
@@ -983,7 +975,7 @@ const convertRegistrationDataToFormData = (obj) => {
 };
 
 const convertProfileDataToFormData = (obj) => {
-  let formData = new FormData();
+  const formData = new FormData();
 
   // First form data
   formData.append("driver[firstName]", obj.firstName);
