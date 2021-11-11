@@ -2,23 +2,27 @@ import React, { useEffect } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { Row, Col } from "native-base";
 import { useTranslation } from "react-i18next";
-import { WithContainer, Loader, Button } from "../../components/index";
-import { getInvoiceDetails } from "../../api/invoice";
-import { fonts, colors } from "../../styles/index";
+import { useSelector } from "react-redux";
+import { WithContainer, Loader, Button } from "../components/index";
+import { getInvoiceDetails } from "../api/invoice";
+import { fonts, colors } from "../styles/index";
 import {
   useStateCallback,
   showToast,
   downloadFileFromURL,
   formatDate,
-} from "../../utility";
-import { constants } from "../../constants";
+} from "../utility";
+import { constants } from "../constants";
 
-const InvoiceDetails = ({ navigation, driverID, route }) => {
+const InvoiceDetails = ({ navigation, route }) => {
   const [state, setState] = useStateCallback({
     isLoading: true,
     invoiceData: {},
     isButtonLoading: false,
   });
+  const { driverID } = useSelector((state) => ({
+    driverID: state?.user?.driverId,
+  }));
   const { isLoading, invoiceData = {}, isButtonLoading } = state;
   const {
     //  date,

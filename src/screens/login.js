@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Formik } from "formik";
-import { WithContainer, Input, Button } from "../../components/index";
-import { colors, fonts, spacing } from "../../styles/index";
-import loginSchema from "../../schema/login";
-import { removeToken, showToast, useStateCallback } from "../../utility";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { WithContainer, Input, Button } from "../components/index";
+import { colors, fonts, spacing } from "../styles/index";
+import loginSchema from "../schema/login";
+import { removeToken, showToast, useStateCallback } from "../utility";
+import { setUserData } from "../actions/login";
 
-const Login = ({ navigation, setUserData, route }) => {
+const Login = ({ navigation, route }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       removeToken();
@@ -15,11 +17,12 @@ const Login = ({ navigation, setUserData, route }) => {
     return unsubscribe;
   }, [route]);
   const [isLoading, setLoader] = useStateCallback(false);
+  const dispatch = useDispatch();
 
   const login = (body) => {
     !isLoading &&
       setLoader(true, () => {
-        setUserData(body)
+        dispatch(setUserData(body))
           .then((res) => {
             setLoader(false);
             res.success === true
@@ -33,7 +36,7 @@ const Login = ({ navigation, setUserData, route }) => {
   };
 
   const handleSubmit = (data) => {
-    let body = {
+    const body = {
       contactNo: Number(data.mobile),
       password: data.password,
     };
@@ -50,18 +53,16 @@ const Login = ({ navigation, setUserData, route }) => {
   return (
     <WithContainer
       contentStyle={styles.content}
-      isHeader={true}
+      isHeader
       title={t("login.headerTitle")}
-      isRefreshControl={false}
-    >
+      isRefreshControl={false}>
       <Formik
         initialValues={{
           mobile: "",
           password: "",
         }}
         validationSchema={() => loginSchema(t)}
-        onSubmit={handleSubmit}
-      >
+        onSubmit={handleSubmit}>
         {({
           values,
           errors,
@@ -91,7 +92,7 @@ const Login = ({ navigation, setUserData, route }) => {
               />
               <Input
                 placeholder={t("login.passwordPlaceholder")}
-                isPassword={true}
+                isPassword
                 onChange={(value) => setFieldValue("password", value)}
                 error={errors.password}
                 showError={touched.password && errors.password}
@@ -103,7 +104,7 @@ const Login = ({ navigation, setUserData, route }) => {
                   passwordRef = input;
                 }}
                 onSubmitEditing={handleSubmit}
-                isSubmit={true}
+                isSubmit
                 withOutItem={false}
                 inputStyle={styles.input}
                 viewStyle={styles.inputParent}

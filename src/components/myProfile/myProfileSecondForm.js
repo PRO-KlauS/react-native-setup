@@ -1,14 +1,14 @@
 import React, { useRef } from "react";
+import { Formik } from "formik";
+import { StyleSheet } from "react-native";
+import { Content } from "native-base";
+import { useTranslation } from "react-i18next";
 import {
   Input,
   PagerDotBar,
   // Button,
   PhotoBanner,
-} from "../../components/index";
-import { Formik } from "formik";
-import { StyleSheet } from "react-native";
-import { Content } from "native-base";
-import { useTranslation } from "react-i18next";
+} from "../index";
 // import {
 //   convertProfileDataToFormData,
 //   showToast,
@@ -26,6 +26,7 @@ const MyProfileSecondForm = ({
   // updateProfileData,
   // setProfileImage,
   profileImage,
+  // dispatch
 }) => {
   // const [isButtonLoading, setButtonLoading] = useStateCallback(false);
   const {
@@ -49,7 +50,7 @@ const MyProfileSecondForm = ({
   //         profileImageObj: profileImage,
   //         ...data,
   //       });
-  //       updateProfileData(formData)
+  //       dispatch(updateProfileData(formData))
   //         .then((res) => {
   //           res.data.success === true
   //             ? showToast(res.data.successMessage)
@@ -90,8 +91,7 @@ const MyProfileSecondForm = ({
           }}
           // validationSchema={() => myProfileSecondForm(t)}
           // onSubmit={handleSubmit}
-          enableReinitialize
-        >
+          enableReinitialize>
           {({
             values,
             errors,
@@ -119,11 +119,11 @@ const MyProfileSecondForm = ({
                   onSubmitEditing={() => {
                     pincodeRef?._root?.focus?.();
                   }}
-                  multiline={true}
+                  multiline
                   placeholder={t("myProfile.addressPlaceholder")}
                   withOutItem={false}
                   maxLength={500}
-                  disabled={true}
+                  disabled
                   selection={{ start: 0, end: 0 }}
                 />
                 <Input
@@ -140,12 +140,12 @@ const MyProfileSecondForm = ({
                     pincodeRef = inputRef;
                   }}
                   onSubmitEditing={handleSubmit}
-                  isSubmit={true}
+                  isSubmit
                   withOutItem={false}
                   inputStyle={styles.input}
                   viewStyle={styles.inputParent}
                   keyboardType="number-pad"
-                  disabled={true}
+                  disabled
                 />
                 <Input
                   placeholder={t("myProfile.bankNamePlaceholder")}
@@ -163,7 +163,7 @@ const MyProfileSecondForm = ({
                   withOutItem={false}
                   inputStyle={styles.input}
                   viewStyle={styles.inputParent}
-                  disabled={true}
+                  disabled
                   selection={{ start: 0, end: 0 }}
                 />
                 <Input
@@ -185,7 +185,7 @@ const MyProfileSecondForm = ({
                   withOutItem={false}
                   inputStyle={styles.input}
                   viewStyle={styles.inputParent}
-                  disabled={true}
+                  disabled
                   selection={{ start: 0, end: 0 }}
                 />
                 <Input
@@ -209,7 +209,7 @@ const MyProfileSecondForm = ({
                   inputStyle={styles.input}
                   viewStyle={styles.inputParent}
                   keyboardType="number-pad"
-                  disabled={true}
+                  disabled
                   selection={{ start: 0, end: 0 }}
                 />
               </>

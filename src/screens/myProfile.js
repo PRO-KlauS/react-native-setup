@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { StyleSheet } from "react-native";
+import { Pager, PagerProvider } from "@crowdlinker/react-native-pager";
 import {
   WithContainer,
   MyProfileFirstForm,
   MyProfileSecondForm,
-} from "../../components";
-import { StyleSheet } from "react-native";
-import { Pager, PagerProvider } from "@crowdlinker/react-native-pager";
-import { colors } from "../../styles/index";
-import { constants } from "../../constants";
+} from "../components";
+import { setProfileData, updateProfileData } from "../actions/profile";
+import { colors } from "../styles/index";
+import { constants } from "../constants";
 
-const MyProfile = ({
-  navigation,
-  setProfileData,
-  profile,
-  updateProfileData,
-  route,
-}) => {
+const MyProfile = ({ navigation, route }) => {
   const [activePage, setActivePage] = useState(0);
   const [firstPageData, setFirstPageData] = useState({});
   const [profileImage, setProfileImage] = useState({
@@ -25,21 +21,24 @@ const MyProfile = ({
   const openDrawer = () => navigation.openDrawer();
   const { icons } = constants;
   const { t } = useTranslation();
+  const { profile } = useSelector((state) => ({
+    profile: state.profile,
+  }));
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setProfileData();
+    dispatch(setProfileData());
   }, []);
 
   return (
     <WithContainer
       title={t("myProfile.headerTitle")}
       isLoading={false}
-      isHeader={true}
+      isHeader
       isRefreshControl={false}
       onLeftIconClick={openDrawer}
       leftIcon={icons.menu.name}
-      noContent={true}
-    >
+      noContent>
       <PagerProvider activeIndex={activePage}>
         <Pager panProps={{ enabled: false }} style={styles.viewPager}>
           <MyProfileFirstForm
@@ -59,6 +58,7 @@ const MyProfile = ({
             firstPageData={firstPageData}
             profile={profile}
             updateProfileData={updateProfileData}
+            dispatch={dispatch}
             profileImage={profileImage}
             setProfileImage={setProfileImage}
           />

@@ -1,4 +1,4 @@
-import { post } from "./client";
+import { post } from "../setup/client";
 
 const register = (body) => {
   return post("Driver/AddDriverAndEV", body, {

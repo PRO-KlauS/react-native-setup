@@ -1,4 +1,4 @@
-import { post } from "./client";
+import { post } from "../setup/client";
 
 const sendOTP = (body) => {
   return post("Home/SendOtp", body);

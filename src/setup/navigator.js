@@ -5,7 +5,7 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ListItem, Icon, Badge } from "native-base";
 import {
   Text,
@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import { useTranslation } from "react-i18next";
+import FlagIcon from "react-native-ico-flags";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 // import VersionCheck from "react-native-version-check";
 
@@ -23,12 +24,12 @@ import { Ripple, Image } from "../components/index";
 import { colors, spacing, fonts } from "../styles/index";
 import { logout } from "../actions/login";
 import { setProfileData } from "../actions/profile";
-import { changeLanguageAction } from "../actions/internationalization";
+import { changeLanguageAction as changeLanguage } from "../actions/internationalization";
 import { setSupportContacts } from "../actions/support";
 import { constants } from "../constants/index";
-import i18nInstance from "../internationalization/intlSetup";
+import i18nInstance from "./i18next";
 // import { setAppVersion, removeRegistrationToken } from "../api/profile";
-// import { fcmService } from "../utility/FCMservice";
+// import { fcmService } from "../utility/fcmService";
 
 import Login from "../screens/login";
 import ForgotPassword from "../screens/forgotPassword";
@@ -80,25 +81,23 @@ const InvoiceListingStack = () => (
 
 const CustomDrawerContent = (props) => {
   const {
-    logout,
     profile = {},
     drawerProps,
-    // changeLanguage,
-    // language,
-    // setNotificationCount,
+    language,
     // userId,
     supportContacts,
+    dispatch,
   } = props;
   // const [FCMToken, setFCMToken] = useState("");
   // const {navigation} = drawerProps;
   const { firstName, lastName, profilePhoto } = profile || {};
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
-  // const onChangeLanguage = (language) => {
-  //   changeLanguage(language);
-  //   i18n.changeLanguage(language);
-  // };
+  const onChangeLanguage = (language) => {
+    dispatch(changeLanguage(language));
+    i18n.changeLanguage(language);
+  };
 
   // const onRegister = async (token) => {
   //   let fcmToken = await AsyncStorage.getItem("FCM_TOKEN");
@@ -117,7 +116,7 @@ const CustomDrawerContent = (props) => {
 
   useEffect(() => {
     setTimeout(() => {
-      // setNotificationCount();
+      // dispatch(setNotificationCount());
       // fcmService.register(onRegister);
     }, 1000);
     // let appVersion = VersionCheck.getCurrentVersion();
@@ -128,11 +127,11 @@ const CustomDrawerContent = (props) => {
     // removeRegistrationToken({ registration_token: FCMToken })
     // .then(() => {
     // setFCMToken("");
-    logout();
+    dispatch(logout());
     // })
     // .catch(() => {
     //   setFCMToken("");
-    //   logout();
+    //   dispatch(logout());
     // });
   };
 
@@ -158,14 +157,14 @@ const CustomDrawerContent = (props) => {
             ) : (
               <Image style={styles.image} url={profilePhoto} />
             )}
-            {/* <View style={styles.flagRow}>
+            <View style={styles.flagRow}>
               <Ripple
                 disabled={language === "en"}
                 onPress={() => onChangeLanguage("en")}
                 style={[
                   { marginBottom: 10 },
                   language === "en" && {
-                    borderBottomColor: colors.borderBlack,
+                    borderBottomColor: colors.borderBlue,
                     borderBottomWidth: 2,
                   },
                 ]}>
@@ -180,13 +179,13 @@ const CustomDrawerContent = (props) => {
                 onPress={() => onChangeLanguage("hi")}
                 style={
                   language === "hi" && {
-                    borderBottomColor: colors.borderBlack,
+                    borderBottomColor: colors.borderBlue,
                     borderBottomWidth: 2,
                   }
                 }>
-                <FlagIcon name="japan" width={40} height={40} />
+                <FlagIcon name="india" width={40} height={40} />
               </Ripple>
-            </View> */}
+            </View>
           </View>
           <View>
             <Text style={styles.userName}>
@@ -318,32 +317,28 @@ const createDrawerItem = (
 const CustomDrawer = (props) => {
   const [isInitialRender, setInitialRender] = useState(true);
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const {
-    logout,
     profile = {},
     userId,
-    setNotificationCount,
     notificationCount,
-    setProfileData,
-    changeLanguage,
     language,
     supportContacts,
-    setSupportContacts,
   } = props;
 
   useEffect(() => {
     setTimeout(() => setInitialRender(false), 1);
-    setProfileData();
+    dispatch(setProfileData());
   }, []);
 
   useEffect(() => {
-    profile?.hubId && setSupportContacts(profile?.hubId);
+    profile?.hubId && dispatch(setSupportContacts(profile?.hubId));
   }, [profile?.hubId]);
 
   return (
     <Drawer.Navigator
       edgeWidth={0}
-      openByDefault={false}
+      defaultStatus="closed"
       drawerStyle={{
         width: isInitialRender ? 0 : 280,
       }}
@@ -351,15 +346,13 @@ const CustomDrawer = (props) => {
       drawerContent={(drawerProps) => (
         <CustomDrawerContent
           drawerProps={drawerProps}
-          logout={logout}
           profile={profile}
           userId={userId}
-          setNotificationCount={setNotificationCount}
           notificationCount={notificationCount}
           setProfileData={setProfileData}
-          changeLanguage={changeLanguage}
           language={language}
           supportContacts={supportContacts}
+          dispatch={dispatch}
         />
       )}
       initialRouteName="myProfile">
@@ -386,12 +379,25 @@ const CustomDrawer = (props) => {
 };
 
 const Navigator = (props) => {
-  const { token, language } = props;
+  const state = useSelector((state) => ({
+    token: state.user.token,
+    profile: state.profile,
+    userId: state.user.id,
+    notificationCount: state.notification,
+    language: state.language,
+    supportContacts: state.supportContacts,
+  }));
   useEffect(() => {
     i18nInstance.changeLanguage(language || "en");
   }, []);
 
-  return !token ? <CustomDrawer {...props} /> : <LoginStack {...props} />;
+  const { token, language } = state;
+
+  return !token ? (
+    <CustomDrawer {...props} {...state} />
+  ) : (
+    <LoginStack {...props} {...state} />
+  );
 };
 
 const styles = StyleSheet.create({
@@ -498,20 +504,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  token: state.user.token,
-  profile: state.profile,
-  userId: state.user.id,
-  notificationCount: state.notification,
-  language: state.language,
-  supportContacts: state.supportContacts,
-});
-const mapDispatchToProps = {
-  logout,
-  setProfileData,
-  // setNotificationCount,
-  changeLanguage: changeLanguageAction,
-  setSupportContacts,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Navigator);
+export default Navigator;

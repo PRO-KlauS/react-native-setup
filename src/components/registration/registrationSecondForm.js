@@ -1,4 +1,7 @@
 import React, { useRef, useEffect } from "react";
+import { Formik } from "formik";
+import { StyleSheet, View } from "react-native";
+import { useTranslation } from "react-i18next";
 import {
   WithContainer,
   Input,
@@ -7,10 +10,7 @@ import {
   RadioButton,
   MaskedInput,
   Dropdown,
-} from "../../components/index";
-import { Formik } from "formik";
-import { StyleSheet, View } from "react-native";
-import { useTranslation } from "react-i18next";
+} from "../index";
 import { fonts, spacing, colors } from "../../styles/index";
 import registrationSecondFormSchema from "../../schema/registrationSecondForm";
 import { openImageAndDocumentPicker } from "../../utility";
@@ -23,12 +23,13 @@ const RegistrationSecondForm = ({
   registrationData,
   setHubListData,
   hubList,
+  dispatch,
 }) => {
   const { t } = useTranslation();
   const { aadharMask, licenseNoMask, panNoMask } = constants.masks;
 
   useEffect(() => {
-    setHubListData();
+    dispatch(setHubListData());
   }, []);
 
   const handleSubmit = (data) => {
@@ -36,16 +37,15 @@ const RegistrationSecondForm = ({
     setActivePage(2);
   };
 
-  let addressRef,
-    pincodeRef = useRef();
+  let addressRef;
+  let pincodeRef = useRef();
 
   return (
     <WithContainer
       isLoading={false}
       isHeader={false}
       isRefreshControl={false}
-      contentStyle={styles.content}
-    >
+      contentStyle={styles.content}>
       <Formik
         initialValues={{
           documentType: "aadhar",
@@ -60,8 +60,7 @@ const RegistrationSecondForm = ({
           pincode: "",
         }}
         validationSchema={() => registrationSecondFormSchema(t)}
-        onSubmit={handleSubmit}
-      >
+        onSubmit={handleSubmit}>
         {({
           values,
           errors,
@@ -214,7 +213,7 @@ const RegistrationSecondForm = ({
                       : t("registration.panPhotoPlaceholder")
                   }
                   isPassword={false}
-                  disabled={true}
+                  disabled
                   error={errors.documentFileName}
                   showError={
                     touched.documentFileName && errors.documentFileName
@@ -237,7 +236,7 @@ const RegistrationSecondForm = ({
                         () =>
                           !touched.fitnessExpiryPhoto &&
                           setFieldTouched("documentFileName", true, true),
-                        1000
+                        1000,
                       );
                     });
                   }}
@@ -260,7 +259,7 @@ const RegistrationSecondForm = ({
                     setTimeout(
                       () =>
                         !touched.hubID && setFieldTouched("hubID", true, true),
-                      1000
+                      1000,
                     );
                   }}
                   parentStyle={{ marginTop: 0 }}
@@ -285,7 +284,7 @@ const RegistrationSecondForm = ({
                 onSubmitEditing={() => {
                   pincodeRef?._root?.focus?.();
                 }}
-                multiline={true}
+                multiline
                 placeholder={t("registration.addressPlaceholder")}
                 withOutItem={false}
                 maxLength={500}
@@ -304,7 +303,7 @@ const RegistrationSecondForm = ({
                   pincodeRef = inputRef;
                 }}
                 onSubmitEditing={handleSubmit}
-                isSubmit={true}
+                isSubmit
                 withOutItem={false}
                 inputStyle={styles.input}
                 viewStyle={styles.inputParent}

@@ -1,4 +1,4 @@
-import { get } from "./client";
+import { get } from "../setup/client";
 
 const getInvoiceList = (body) => {
   return get("some_url", body);

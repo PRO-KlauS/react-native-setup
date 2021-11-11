@@ -1,4 +1,4 @@
-import { get, post } from "./client";
+import { get, post } from "../setup/client";
 
 const getEVListing = (driverID) => {
   return post(`EV/ActiveEVlist?driverid=${driverID}`);

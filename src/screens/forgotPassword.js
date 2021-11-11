@@ -3,12 +3,12 @@ import { Text, View } from "native-base";
 import { StyleSheet } from "react-native";
 import { Formik } from "formik";
 import { useTranslation } from "react-i18next";
-import { WithLogoLayout, Input, Button } from "../../components/index";
-import { colors, fonts, spacing } from "../../styles/index";
-import { constants } from "../../constants/index";
-import forgotPasswordSchema from "../../schema/forgotPassword";
-import { sendOTP } from "../../api/otp";
-import { showToast } from "../../utility";
+import { WithLogoLayout, Input, Button } from "../components/index";
+import { colors, fonts, spacing } from "../styles/index";
+import { constants } from "../constants/index";
+import forgotPasswordSchema from "../schema/forgotPassword";
+import { sendOTP } from "../api/otp";
+import { showToast } from "../utility";
 
 const ForgotPassword = ({ navigation }) => {
   const [isLoading, setLoader] = useState(false);
@@ -19,8 +19,8 @@ const ForgotPassword = ({ navigation }) => {
   const goBack = () => navigation.goBack();
 
   const handleSubmit = (data) => {
-    let body = {
-      contactNo: "+91" + data.mobileNo,
+    const body = {
+      contactNo: `+91${data.mobileNo}`,
     };
     !isLoading &&
       sendOTP(body)
@@ -44,17 +44,15 @@ const ForgotPassword = ({ navigation }) => {
 
   return (
     <WithLogoLayout
-      isHeader={true}
+      isHeader
       leftIcon={icons.arrowBack.name}
       onLeftIconClick={goBack}
       title={t("forgotPassword.headerTitle")}
-      style={styles.parent}
-    >
+      style={styles.parent}>
       <Formik
         initialValues={{ mobileNo: "" }}
         validationSchema={() => forgotPasswordSchema(t)}
-        onSubmit={handleSubmit}
-      >
+        onSubmit={handleSubmit}>
         {({
           values,
           errors,
@@ -83,7 +81,7 @@ const ForgotPassword = ({ navigation }) => {
                   !touched.mobileNo && setFieldTouched("mobileNo", true, true)
                 }
                 onSubmitEditing={handleSubmit}
-                isSubmit={true}
+                isSubmit
                 withOutItem={false}
                 inputStyle={styles.input}
                 viewStyle={[styles.inputParent, { marginTop: 10 }]}

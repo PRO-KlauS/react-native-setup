@@ -1,10 +1,10 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import store from "../redux/store";
-import enTranslation from "./enTranslation";
-import hiTranslation from "./hiTranslation";
+import store from "./store";
+import enTranslation from "../translations/enTranslation";
+import hiTranslation from "../translations/hiTranslation";
 
-let state = (store && store.getState()) || {};
+const state = (store && store.getState()) || {};
 
 i18n.use(initReactI18next).init({
   lng: state.language || "en",

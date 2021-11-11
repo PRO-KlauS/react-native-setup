@@ -1,7 +1,7 @@
 import { login } from "../api/login";
 // import { setProfileData } from "./profile";
 import { saveToken, removeToken } from "../utility";
-// import { fcmService } from "../utility/FCMservice";
+// import { fcmService } from "../utility/fcmService";
 
 const SET_USER_DATA = "SET_USER_DATA";
 const LOGOUT = "LOGOUT";
@@ -19,9 +19,8 @@ const setUserData = (body) => (dispatch) => {
       saveToken(`${res.data.user?.token}`);
       // dispatch(setProfileData());
       return res.data;
-    } else {
-      return res.data;
     }
+    return res.data;
   });
 };
 

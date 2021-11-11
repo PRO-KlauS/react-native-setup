@@ -9,11 +9,11 @@ import {
   Loader,
   Footer,
   SortDropdown,
-} from "../../components";
-import { constants } from "../../constants";
-import { spacing } from "../../styles";
-import { getInvoiceList } from "../../api/invoice";
-import { showToast, useStateCallback } from "../../utility";
+} from "../components";
+import { constants } from "../constants";
+import { spacing } from "../styles";
+import { getInvoiceList } from "../api/invoice";
+import { showToast, useStateCallback } from "../utility";
 
 const InvoiceListing = ({ navigation }) => {
   const { t } = useTranslation();
@@ -28,42 +28,49 @@ const InvoiceListing = ({ navigation }) => {
         amount: 100,
         date: "05/05/2021",
         paymentMethod: "Cash",
+        id: 1,
       },
       {
         ev_number: "AB 01 XY 1231",
         amount: 100,
         date: "05/05/2021",
         paymentMethod: "Credit/Debit Card",
+        id: 2,
       },
       {
         ev_number: "AB 01 XY 1231",
         amount: 100,
         date: "05/05/2021",
         paymentMethod: "Credit/Debit Card",
+        id: 3,
       },
       {
         ev_number: "AB 01 XY 1231",
         amount: 100,
         date: "05/05/2021",
         paymentMethod: "Credit/Debit Card",
+        id: 4,
       },
       {
         ev_number: "AB 01 XY 1231",
         amount: 100,
         date: "05/05/2021",
         paymentMethod: "Cash",
+        id: 5,
       },
       {
         ev_number: "AB 01 XY 1231",
         amount: 100,
         date: "05/05/2021",
         paymentMethod: "Cash",
+        id: 6,
       },
       {
         ev_number: "AB 01 XY 1231",
         amount: 100,
         date: "05/05/2021",
         paymentMethod: "Cash",
+        id: 7,
       },
     ],
     searchValue: "",
@@ -85,11 +92,11 @@ const InvoiceListing = ({ navigation }) => {
   }, []);
 
   const onSortMethodChange = (sortMethod) => {
-    setState({ ...state, sortMethod: sortMethod });
+    setState({ ...state, sortMethod });
   };
 
   const getInvoices = (search, page) => {
-    getInvoiceList({ q: { search_cont: search }, page: page })
+    getInvoiceList({ q: { search_cont: search }, page })
       .then((res) => {
         if (res.data.success) {
           setState({
@@ -134,7 +141,7 @@ const InvoiceListing = ({ navigation }) => {
 
   const debouncedSearchInvoices = useCallback(
     _.debounce(searchInvoices, 1000),
-    []
+    [],
   );
 
   const handleSearchValueChange = (value) => {
@@ -147,12 +154,12 @@ const InvoiceListing = ({ navigation }) => {
       },
       ({ searchValue }) => {
         debouncedSearchInvoices(searchValue);
-      }
+      },
     );
   };
 
   const onInvoiceClick = (invoiceID) =>
-    navigation.navigate("invoiceDetails", { invoiceID: invoiceID });
+    navigation.navigate("invoiceDetails", { invoiceID });
 
   const renderItem = ({ item = {} }) => {
     return (
@@ -173,7 +180,7 @@ const InvoiceListing = ({ navigation }) => {
     }
   };
   const openDrawer = () => navigation.openDrawer();
-  const { icons, sortDropDownList } = constants;
+  const { icons } = constants;
   return (
     <WithContainer
       title={t("invoiceListing.headerTitle")}
@@ -181,9 +188,8 @@ const InvoiceListing = ({ navigation }) => {
       onLeftIconClick={openDrawer}
       leftIcon={icons.menu.name}
       isRefreshControl={false}
-      isHeader={true}
-      noContent={true}
-    >
+      isHeader
+      noContent>
       <View style={styles.container}>
         <View style={styles.searchParent}>
           <SearchBar
@@ -194,18 +200,16 @@ const InvoiceListing = ({ navigation }) => {
           />
           <SortDropdown
             selectedValue={sortMethod}
-            options={sortDropDownList}
+            options={t("invoiceListing.sortDropDownList", {
+              returnObjects: true,
+            })}
             onChange={onSortMethodChange}
             parentStyle={styles.dropDown}
             prompt={t("invoiceListing.sortPlaceholder")}
           />
         </View>
         {isLoadingData ? (
-          <Loader
-            hasLoaderText={true}
-            hasLoader={true}
-            parentStyle={{ marginTop: -60 }}
-          />
+          <Loader hasLoaderText hasLoader parentStyle={{ marginTop: -60 }} />
         ) : (
           <FlatList
             style={styles.content}
@@ -213,7 +217,7 @@ const InvoiceListing = ({ navigation }) => {
             renderItem={renderItem}
             onEndReached={handleMore}
             onEndReachedThreshold={0.01}
-            bounces={true}
+            bounces
             keyExtractor={(item) => item.id}
             ListFooterComponent={
               <Footer

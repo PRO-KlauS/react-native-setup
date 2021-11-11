@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
-import loginReducer from "./login";
-import profileReducer from "./profile";
+import loginReducer from "../reducers/login";
+import profileReducer from "../reducers/profile";
 import { LOGOUT } from "../actions/login";
-import dropdownsReducer from "./dropdowns";
-import languageReducer from "./internationalization";
-import supportReducer from "./support";
+import dropdownsReducer from "../reducers/dropdowns";
+import languageReducer from "../reducers/internationalization";
+import supportReducer from "../reducers/support";
 
 const initialState = {
   user: {},

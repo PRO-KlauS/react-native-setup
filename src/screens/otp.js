@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Text, View } from "native-base";
-import { WithLogoLayout, Input, Button } from "../../components/index";
 import { StyleSheet } from "react-native";
 import { Formik } from "formik";
 import { useTranslation } from "react-i18next";
-import { colors, fonts, spacing } from "../../styles/index";
-import { constants } from "../../constants/index";
-import otpSchema from "../../schema/otp";
-import { verifyOTP, sendOTP } from "../../api/otp";
-import { showToast } from "../../utility";
+import { WithLogoLayout, Input, Button } from "../components/index";
+import { colors, fonts, spacing } from "../styles/index";
+import { constants } from "../constants/index";
+import otpSchema from "../schema/otp";
+import { verifyOTP, sendOTP } from "../api/otp";
+import { showToast } from "../utility";
 
 const OTP = ({ navigation, route }) => {
   const [isLoading, setLoader] = useState(false);
@@ -38,8 +38,8 @@ const OTP = ({ navigation, route }) => {
   const goBack = () => navigation.goBack();
 
   const resendOTP = () => {
-    let body = {
-      contactNo: "+91" + mobileNo,
+    const body = {
+      contactNo: `+91${mobileNo}`,
     };
     !isLoading &&
       sendOTP(body)
@@ -58,7 +58,7 @@ const OTP = ({ navigation, route }) => {
   };
 
   const handleSubmit = (data) => {
-    let body = {
+    const body = {
       contactNo: mobileNo,
       otp: data.otp,
     };
@@ -68,7 +68,7 @@ const OTP = ({ navigation, route }) => {
           setLoader(false);
           showToast(res.data.successMessage);
           navigation.navigate("resetPassword", {
-            mobileNo: mobileNo,
+            mobileNo,
           });
         } else {
           setLoader(false);
@@ -83,17 +83,15 @@ const OTP = ({ navigation, route }) => {
 
   return (
     <WithLogoLayout
-      isHeader={true}
+      isHeader
       leftIcon={icons.arrowBack.name}
       onLeftIconClick={goBack}
       title={t("otp.headerTitle")}
-      style={styles.parent}
-    >
+      style={styles.parent}>
       <Formik
         initialValues={{ otp: "" }}
         validationSchema={() => otpSchema(t)}
-        onSubmit={handleSubmit}
-      >
+        onSubmit={handleSubmit}>
         {({
           values,
           errors,
@@ -120,7 +118,7 @@ const OTP = ({ navigation, route }) => {
                 onSubmitEditing={() => {
                   handleSubmit();
                 }}
-                isSubmit={true}
+                isSubmit
                 withOutItem={false}
                 inputStyle={styles.input}
                 viewStyle={[styles.inputParent, { marginTop: 10 }]}
@@ -141,10 +139,9 @@ const OTP = ({ navigation, route }) => {
                   style={[
                     styles.resendText,
                     { color: isActive ? colors.textGray : colors.textPrimary },
-                  ]}
-                >
+                  ]}>
                   {isActive
-                    ? t("otp.resend") + " in " + seconds
+                    ? `${t("otp.resend")} in ${seconds}`
                     : t("otp.resend")}
                 </Text>
               </Text>

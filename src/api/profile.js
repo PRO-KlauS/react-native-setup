@@ -1,4 +1,4 @@
-import { get, put } from "./client";
+import { get, put } from "../setup/client";
 
 const getProfile = (userID) => {
   return get(`Driver/GetById/${userID}`);

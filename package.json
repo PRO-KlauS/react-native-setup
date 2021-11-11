@@ -6,6 +6,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "start:staging": "APP_ENV=staging npm start",
+    "start:production": "APP_ENV=production npm start",
     "test": "jest"
   },
   "dependencies": {
@@ -33,6 +35,7 @@
     "react-native-dotenv": "^3.3.0",
     "react-native-fast-image": "^8.5.11",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-ico-flags": "^3.3.1",
     "react-native-material-ripple": "^0.9.1",
     "react-native-modal": "^13.0.0",
     "react-native-modal-datetime-picker": "^13.0.0",
@@ -41,8 +44,10 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
     "react-native-sectioned-multi-select": "^0.8.1",
+    "react-native-svg": "^12.1.1",
     "react-native-text-input-mask": "^3.1.4",
     "react-native-user-avatar": "^1.0.7",
+    "react-native-vector-icons": "^9.0.0",
     "react-native-version-check": "^3.4.2",
     "react-redux": "^7.2.6",
     "redux": "^4.1.2",

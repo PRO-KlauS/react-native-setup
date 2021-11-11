@@ -1,38 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { StyleSheet } from "react-native";
+import { Pager, PagerProvider } from "@crowdlinker/react-native-pager";
 import {
   WithContainer,
   RegistrationFirstForm,
   RegistrationSecondForm,
   RegistrationThirdForm,
   RegistrationFourthForm,
-} from "../../components";
-import { StyleSheet } from "react-native";
-import { Pager, PagerProvider } from "@crowdlinker/react-native-pager";
-import { colors } from "../../styles/index";
-import { constants } from "../../constants";
+} from "../components";
+import { setHubListData } from "../actions/dropdowns";
+import { colors } from "../styles/index";
+import { constants } from "../constants";
 
-const Registration = ({ navigation, setHubListData, hubList }) => {
+const Registration = ({ navigation }) => {
   const [activePage, setActivePage] = useState(0);
   const [registrationData, setRegistrationData] = useState({});
   const goBack = () => navigation.goBack();
   const { icons } = constants;
   const { t } = useTranslation();
+  const { hubList } = useSelector((state) => ({
+    hubList: state?.dropdowns?.hubList,
+  }));
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setHubListData();
+    dispatch(setHubListData());
   }, []);
 
   return (
     <WithContainer
       title={t("registration.headerTitle")}
       isLoading={false}
-      isHeader={true}
+      isHeader
       isRefreshControl={false}
       onLeftIconClick={goBack}
       leftIcon={icons.arrowBack.name}
-      noContent={true}
-    >
+      noContent>
       <PagerProvider activeIndex={activePage}>
         <Pager panProps={{ enabled: false }} style={styles.viewPager}>
           <RegistrationFirstForm
@@ -50,6 +55,7 @@ const Registration = ({ navigation, setHubListData, hubList }) => {
             registrationData={registrationData}
             hubList={hubList}
             setHubListData={setHubListData}
+            dispatch={dispatch}
           />
           <RegistrationThirdForm
             setActivePage={setActivePage}

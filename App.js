@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { LogBox, StatusBar, Platform } from "react-native";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
-import store, { persistor } from "./src/redux/store";
 import { NavigationContainer } from "@react-navigation/native";
 import VersionCheck from "react-native-version-check";
 import RNBootSplash from "react-native-bootsplash";
-import Drawer from "./src/navigation/drawer";
 import { Root } from "native-base";
+import Drawer from "./src/setup/navigator";
+import store, { persistor } from "./src/setup/store";
 import { enableFontPatch } from "./src/utility";
 // import PushNotification from "react-native-push-notification";
 // import PushNotificationIOS from "@react-native-community/push-notification-ios";
@@ -20,7 +20,7 @@ import { colors } from "./src/styles";
 enableFontPatch();
 
 const navigationDeferred = new Deferred();
-let isIOS = Platform.OS === "ios";
+const isIOS = Platform.OS === "ios";
 
 // !isIOS && PushNotification.createChannel({
 //   channelId: "Test_ID",
@@ -92,8 +92,7 @@ const App = () => {
             barStyle="light-content"
           />
           <NavigationContainer
-            ref={(navigatorRef) => navigationDeferred.resolve(navigatorRef)}
-          >
+            ref={(navigatorRef) => navigationDeferred.resolve(navigatorRef)}>
             <Drawer />
           </NavigationContainer>
           {updateNeeded && <UpdateAppPopup />}

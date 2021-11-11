@@ -20,12 +20,6 @@ const constants = {
     aadharMask: "[0000]{ }[0000]{ }[0000]",
     vehicleNoMask: "[AA]{ }[00]{ }[AA]{ }[0000]",
   },
-  sortDropDownList: [
-    { label: "Date: Oldest to Newest", value: "date_old_to_new" },
-    { label: "Date: Newest to Oldest", value: "date_new_to_old" },
-    { label: "Amount: Low to High", value: "amount_low_to_high" },
-    { label: "Amount: High to Low", value: "amount_high_to_low" },
-  ],
   icons: {
     home: { name: "home", type: "Entypo" },
     arrowBack: { name: "arrow-back", type: "MaterialIcons" },

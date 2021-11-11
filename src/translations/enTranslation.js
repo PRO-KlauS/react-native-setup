@@ -1,4 +1,4 @@
-const hiTranslation = {
+const enTranslation = {
   loaderText: "Loading, Please wait",
   login: {
     buttons: {
@@ -123,6 +123,12 @@ const hiTranslation = {
     headerTitle: "Invoice History",
     searchPlaceholder: "Search by Date",
     sortPlaceholder: "Sort",
+    sortDropDownList: [
+      { label: "Date: Oldest to Newest", value: "date_old_to_new" },
+      { label: "Date: Newest to Oldest", value: "date_new_to_old" },
+      { label: "Amount: Low to High", value: "amount_low_to_high" },
+      { label: "Amount: High to Low", value: "amount_high_to_low" },
+    ],
   },
   invoiceDetails: {
     headerTitle: "Invoice Details",
@@ -158,7 +164,6 @@ const hiTranslation = {
     atLeast6Chars: "Password must be 6 characters long.",
     max12Chars: "Password can't be longer than 12 characters.",
     onlyChars: "Numbers and special characters are not allowed.",
-    validMobile: "Enter valid mobile number.",
     validPincode: "Enter valid pincode.",
     validAadhar: "Enter valid Aadhar card number.",
     validPAN: "Enter valid PAN card number.",
@@ -188,4 +193,4 @@ const hiTranslation = {
     noInvoiceHistory: "No invoice history available.",
   },
 };
-export default hiTranslation;
+export default enTranslation;

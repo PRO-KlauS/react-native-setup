@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { WithLogoLayout, Input, Button } from "../../components/index";
 import { StyleSheet, View, Text } from "react-native";
 import { Formik } from "formik";
 import { useTranslation } from "react-i18next";
-import { colors, fonts } from "../../styles/index";
-import resetPasswordSchema from "../../schema/resetPassword";
-import { resetPassword } from "../../api/resetPassword";
-import { showToast } from "../../utility";
-import { constants } from "../../constants";
+import { WithLogoLayout, Input, Button } from "../components/index";
+import { colors, fonts } from "../styles/index";
+import resetPasswordSchema from "../schema/resetPassword";
+import { resetPassword } from "../api/resetPassword";
+import { showToast } from "../utility";
+import { constants } from "../constants";
 
 const ResetPassword = ({ navigation, route }) => {
   const [isLoading, setLoader] = useState(false);
@@ -19,7 +19,7 @@ const ResetPassword = ({ navigation, route }) => {
   const goBack = () => navigation.goBack();
 
   const onReset = (data) => {
-    let body = {
+    const body = {
       contactNo: route?.params?.mobileNo,
       password: data.password,
     };
@@ -44,16 +44,14 @@ const ResetPassword = ({ navigation, route }) => {
   return (
     <WithLogoLayout
       style={styles.parent}
-      isHeader={true}
+      isHeader
       leftIcon={icons.arrowBack.name}
       onLeftIconClick={goBack}
-      title={t("resetPassword.headerTitle")}
-    >
+      title={t("resetPassword.headerTitle")}>
       <Formik
         initialValues={{ password: "", confirmPassword: "" }}
         validationSchema={() => resetPasswordSchema(t)}
-        onSubmit={onReset}
-      >
+        onSubmit={onReset}>
         {({
           values,
           errors,
@@ -69,7 +67,7 @@ const ResetPassword = ({ navigation, route }) => {
               </View>
               <Input
                 placeholder={t("resetPassword.passwordPlaceholder")}
-                isPassword={true}
+                isPassword
                 onChange={(value) => setFieldValue("password", value)}
                 error={errors.password}
                 showError={touched.password && errors.password}
@@ -87,7 +85,7 @@ const ResetPassword = ({ navigation, route }) => {
               />
               <Input
                 placeholder={t("resetPassword.confirmPassPlaceholder")}
-                isPassword={true}
+                isPassword
                 onChange={(value) => setFieldValue("confirmPassword", value)}
                 error={errors.confirmPassword}
                 showError={touched.confirmPassword && errors.confirmPassword}
@@ -100,7 +98,7 @@ const ResetPassword = ({ navigation, route }) => {
                   confirmPasswordRef = input;
                 }}
                 onSubmitEditing={handleSubmit}
-                isSubmit={true}
+                isSubmit
                 withOutItem={false}
                 inputStyle={styles.input}
                 viewStyle={styles.inputParent}
