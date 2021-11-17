@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+// import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
+// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from "@react-navigation/stack";
 import { useDispatch, useSelector } from "react-redux";
 import { ListItem, Icon, Badge } from "native-base";
@@ -27,6 +29,7 @@ import { setProfileData } from "../actions/profile";
 import { changeLanguageAction as changeLanguage } from "../actions/internationalization";
 import { setSupportContacts } from "../actions/support";
 import { constants } from "../constants/index";
+// import { tabBarIconMapper } from "../utility/mapper"
 import i18nInstance from "./i18next";
 // import { setAppVersion, removeRegistrationToken } from "../api/profile";
 // import { fcmService } from "../utility/fcmService";
@@ -42,42 +45,68 @@ import InvoiceDetails from "../screens/invoiceDetails";
 import { capitalize } from "../utility";
 
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
+// const Tab = createBottomTabNavigator();
+const LoginNav = createStackNavigator();
+const MyProfileNav = createStackNavigator();
+const InvoiceListingNav = createStackNavigator();
 const { icons } = constants;
 
 // let isIOS = Platform.OS === "ios"
 
 const LoginStack = () => (
-  <Stack.Navigator
+  <LoginNav.Navigator
     initialRouteName="login"
-    screenOptions={{ headerShown: false }}
+    screenOptions={{
+      headerShown: false,
+      gestureEnabled: true,
+      gestureDirection: "horizontal",
+    }}
     defaultScreenOptions={{ headerShown: false }}>
-    <Stack.Screen name="login" component={Login} />
-    <Stack.Screen name="otp" component={OTP} />
-    <Stack.Screen name="forgotPassword" component={ForgotPassword} />
-    <Stack.Screen name="resetPassword" component={ResetPassword} />
-    <Stack.Screen name="registration" component={Registration} />
-  </Stack.Navigator>
+    <LoginNav.Screen name="login" component={Login} />
+    <LoginNav.Screen name="otp" component={OTP} />
+    <LoginNav.Screen name="forgotPassword" component={ForgotPassword} />
+    <LoginNav.Screen name="resetPassword" component={ResetPassword} />
+    <LoginNav.Screen name="registration" component={Registration} />
+  </LoginNav.Navigator>
 );
 
-const MyProfileStack = () => (
-  <Stack.Navigator
-    initialRouteName="myProfile"
-    screenOptions={{ headerShown: false }}
-    defaultScreenOptions={{ headerShown: false }}>
-    <Stack.Screen name="myProfile" component={MyProfile} />
-  </Stack.Navigator>
-);
+const MyProfileStack = () => {
+  return (
+    <MyProfileNav.Navigator
+      initialRouteName="myProfile"
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: true,
+        gestureDirection: "horizontal",
+      }}
+      defaultScreenOptions={{ headerShown: false }}>
+      <MyProfileNav.Screen name="myProfile" component={MyProfile} />
+    </MyProfileNav.Navigator>
+  );
+};
 
-const InvoiceListingStack = () => (
-  <Stack.Navigator
-    initialRouteName="invoiceListing"
-    screenOptions={{ headerShown: false }}
-    defaultScreenOptions={{ headerShown: false }}>
-    <Stack.Screen name="invoiceListing" component={InvoiceListing} />
-    <Stack.Screen name="invoiceDetails" component={InvoiceDetails} />
-  </Stack.Navigator>
-);
+const InvoiceListingStack = () => {
+  return (
+    <InvoiceListingNav.Navigator
+      initialRouteName="invoiceListing"
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: true,
+        gestureDirection: "horizontal",
+      }}
+      defaultScreenOptions={{ headerShown: false }}>
+      <InvoiceListingNav.Screen
+        name="invoiceListing"
+        component={InvoiceListing}
+      />
+      <InvoiceListingNav.Screen
+        name="invoiceDetails"
+        component={InvoiceDetails}
+        options={{ tabBarLabel: "Settings!" }}
+      />
+    </InvoiceListingNav.Navigator>
+  );
+};
 
 const CustomDrawerContent = (props) => {
   const {
@@ -355,7 +384,7 @@ const CustomDrawer = (props) => {
           dispatch={dispatch}
         />
       )}
-      initialRouteName="myProfile">
+      initialRouteName="myProfileStack">
       {createDrawerItem(
         "myProfileStack",
         t("drawer.myProfilePlaceholder"),
@@ -378,6 +407,65 @@ const CustomDrawer = (props) => {
   );
 };
 
+// const TabNavigator = () => {
+//   const { t } = useTranslation();
+//   const tabBarTitleMapper = {
+//     myProfileStack: {
+//       title: t("drawer.myProfilePlaceholder")
+//     },
+//     invoiceListingStack: {
+//       title: t("drawer.invoiceHistoryPlaceholder")
+//     }
+//   }
+
+//   const getTabBarVisibility = (route) => {
+//     let display = "flex"
+//     if (getFocusedRouteNameFromRoute(route) === "invoiceDetails") display = "none"
+//     return display
+//   }
+
+//   return (
+//     <Tab.Navigator
+//       screenOptions={({ route }) => ({
+//         tabBarIcon: ({ focused }) => {
+//           return <Icon
+//             type={tabBarIconMapper[route.name]?.type}
+//             name={tabBarIconMapper[route.name]?.name}
+//             style={[
+//               {
+//                 color: focused ? colors.iconPrimary : colors.iconGray,
+//                 fontSize: 18,
+//               },
+//             ]}
+//           />;
+//         },
+//         tabBarLabel: ({ focused }) => (
+//           <Text
+//             style={[
+//               {
+//                 color: focused ? colors.textPrimary : colors.textGray,
+//                 marginBottom: 5
+//               },
+//             ]}>
+//             {tabBarTitleMapper[route.name]?.title}
+//           </Text>
+//         ),
+//         tabBarStyle: {
+//           display: getTabBarVisibility(route),
+//           height: 60,
+//         },
+//         tabBarActiveTintColor: colors.iconPrimary,
+//         tabBarInactiveTintColor: colors.iconGray,
+//         headerShown: false,
+//       })}
+//       initialRouteName="myProfile"
+//     >
+//       <Tab.Screen name="myProfileStack" component={MyProfileStack} />
+//       <Tab.Screen name="invoiceListingStack" component={InvoiceListingStack} />
+//     </Tab.Navigator>
+//   )
+// }
+
 const Navigator = (props) => {
   const state = useSelector((state) => ({
     token: state.user.token,
@@ -396,6 +484,7 @@ const Navigator = (props) => {
   return !token ? (
     <CustomDrawer {...props} {...state} />
   ) : (
+    // <TabNavigator {...props} {...state} />
     <LoginStack {...props} {...state} />
   );
 };
